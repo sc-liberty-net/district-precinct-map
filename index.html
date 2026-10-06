@@ -3,16 +3,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SC Congressional Districts &amp; Precincts</title>
-<meta name="theme-color" content="#0C111C">
+<meta name="theme-color" content="#151E31">
 <meta name="description" content="An interactive map of South Carolina's 46 counties, 7 congressional districts, and 2,315 voting precincts, with every polling place. Confirm where you vote at scvotes.gov.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232B4C8C'/><circle cx='22' cy='9.5' r='4.6' fill='%23fff'/><circle cx='24' cy='8' r='4.4' fill='%232B4C8C'/><path d='M10 25V15M10 15l-5.2-3.6M10 15l5.2-3.6M10 15l-4.6 1.4M10 15l4.6 1.4' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' fill='none'/></svg>"><script>
 (function () {
-  var t = null;
-  try { t = localStorage.getItem('plat-theme'); } catch (_) {}
-  var th = t === 'light' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', th);
+  document.documentElement.setAttribute('data-theme', 'dark');
   var tc = document.querySelector('meta[name="theme-color"]');
-  if (tc) tc.setAttribute('content', th === 'light' ? '#E4E7EB' : '#0C111C');
+  if (tc) tc.setAttribute('content', '#151E31');
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,28 +31,28 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --paper:#0C111C; --plat:#131A28; --panel:#171F30; --sunk:#0A0F19;
+    --paper:#151E31; --plat:#1D273D; --panel:#212C45; --sunk:#131C2F;
     --ink:#E7EBF2; --ink-2:#B4BDCC; --muted:#909BAF; --faint:#5D6779;
-    --rule:#2A3547; --hair:#212B3B;
+    --rule:#35435A; --hair:#2C394F;
     --indigo:#7FA0DC; --indigo-2:#A8C0EB; --indigo-wash:#1C2740;
     --on-indigo:#0C111C;
     --gold:#D9A94E; --gold-wash:#2C2418; --gold-tint:#33302A; --gold-ink:#D9A94E;
     --rep:#D4746A; --dem:#6FA3D1; --oth:#B6A377; --open:#DFE5EE; --open-line:#FFFFFF;
-    --land:#1B2434; --land-2:#212C3E; --water:#0E1523;
+    --land:#253248; --land-2:#2C3A52; --water:#172239;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.5);
     --d1:#7FA0DC; --d2:#63B0BE; --d3:#A3B665; --d4:#4FA87A;
     --d5:#D08A5C; --d6:#C1738C; --d7:#8E88C9;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#0C111C; --plat:#131A28; --panel:#171F30; --sunk:#0A0F19;
+  --paper:#151E31; --plat:#1D273D; --panel:#212C45; --sunk:#131C2F;
   --ink:#E7EBF2; --ink-2:#B4BDCC; --muted:#909BAF; --faint:#5D6779;
-  --rule:#2A3547; --hair:#212B3B;
+  --rule:#35435A; --hair:#2C394F;
   --indigo:#7FA0DC; --indigo-2:#A8C0EB; --indigo-wash:#1C2740;
   --on-indigo:#0C111C;
   --gold:#D9A94E; --gold-wash:#2C2418; --gold-tint:#33302A; --gold-ink:#D9A94E;
   --rep:#D4746A; --dem:#6FA3D1; --oth:#B6A377; --open:#DFE5EE; --open-line:#FFFFFF;
-  --land:#1B2434; --land-2:#212C3E; --water:#0E1523;
+  --land:#253248; --land-2:#2C3A52; --water:#172239;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.5);
   --d1:#7FA0DC; --d2:#63B0BE; --d3:#A3B665; --d4:#4FA87A;
   --d5:#D08A5C; --d6:#C1738C; --d7:#8E88C9;
@@ -102,10 +99,6 @@ header{
   font-size:20px; margin:0; letter-spacing:-.01em; white-space:nowrap;
 }
 .brand .short{display:none}
-.brand .sub{
-  font-size:var(--t-1); letter-spacing:.14em; text-transform:uppercase;
-  color:var(--muted); font-weight:600; white-space:nowrap;
-}
 .searchwrap{position:relative; flex:1 1 auto; min-width:0}
 .searchwrap input{
   width:100%; padding:7px 11px 7px 30px; background:var(--sunk);
@@ -138,32 +131,46 @@ header{
 .ghost:hover{background:var(--sunk); color:var(--ink)}
 
 main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
-.railgrip{display:none}
-.rail{
-  width:224px; min-width:224px; max-width:224px; flex:none;
-  background:var(--panel); border-right:1px solid var(--rule);
-  overflow-y:auto; padding:16px 0 28px;
-  scrollbar-width:thin; scrollbar-color:var(--rule) var(--panel);
-}
-.rail::-webkit-scrollbar{width:10px}
-.rail::-webkit-scrollbar-track{background:var(--panel)}
-.rail::-webkit-scrollbar-thumb{
+.topbar{position:absolute; top:14px; left:16px; right:16px; z-index:24;
+  display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px 10px; pointer-events:none}
+.tiles{display:flex; flex-direction:column; align-items:stretch; gap:8px; flex:none; width:236px}
+.tile{pointer-events:auto; background:var(--panel); border:1px solid var(--rule);
+  border-radius:7px; box-shadow:var(--shadow)}
+#selBtn{justify-content:flex-start}
+#selBtn .cur{margin-left:auto; color:var(--muted); font-weight:500}
+.selpanel{padding:2px 8px 8px}
+.selpanel[hidden]{display:none}
+.stepper{display:flex; align-items:center; gap:2px; background:var(--sunk);
+  border-radius:6px; padding:2px}
+.step{flex:none; width:36px; height:32px; display:grid; place-items:center;
+  background:var(--panel); border:0; border-radius:4px; cursor:pointer;
+  color:var(--ink-2); font-size:20px; line-height:1}
+.step:hover{background:var(--indigo-wash); color:var(--ink)}
+.stepval{flex:1; text-align:center; font-size:var(--t-3); font-weight:600; color:var(--ink)}
+.tile.disp{position:relative}
+.dispbtn{display:flex; align-items:center; justify-content:space-between; width:100%;
+  gap:7px; background:none; border:0; cursor:pointer;
+  padding:8px 11px; font-size:var(--t-2); font-weight:600; color:var(--ink-2); border-radius:7px}
+.dispbtn::after{content:"\25BE"; font-size:var(--t-1); color:var(--muted)}
+.dispbtn[aria-expanded="true"]::after{content:"\25B4"}
+.dispbtn:hover{background:var(--sunk); color:var(--ink)}
+.disppanel{position:absolute; top:calc(100% + 6px); left:0; right:0;
+  background:var(--panel); border:1px solid var(--rule); border-radius:7px;
+  box-shadow:var(--shadow); padding:8px 8px 10px;
+  display:flex; flex-direction:column; gap:1px;
+  max-height:min(70vh, 520px); overflow-y:auto;
+  scrollbar-width:thin; scrollbar-color:var(--rule) var(--panel)}
+.disppanel[hidden]{display:none}
+.disppanel::-webkit-scrollbar{width:10px}
+.disppanel::-webkit-scrollbar-track{background:var(--panel)}
+.disppanel::-webkit-scrollbar-thumb{
   background:var(--rule); border-radius:6px; border:2px solid var(--panel);
 }
-.rail::-webkit-scrollbar-thumb:hover{background:var(--muted)}
-.grp{padding:0 16px 16px}
-.grp+.grp{border-top:1px solid var(--hair); padding-top:14px}
-.grp h2{
-  font-size:var(--t-1); letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
-  margin:0 0 9px; font-weight:700;
-}
-.seg{display:flex; background:var(--sunk); border-radius:6px; padding:2px; gap:2px}
-.seg button{
-  flex:1; padding:5px 2px; font-size:var(--t-2); font-weight:500; background:none;
-  border:0; border-radius:4px; cursor:pointer; color:var(--ink-2);
-}
-.seg button[aria-checked="true"]{background:var(--panel); color:var(--ink);
-  box-shadow:0 1px 2px rgba(18,24,43,.13); font-weight:600}
+.disppanel::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+.disppanel .legend:not(:empty){margin:8px 6px 2px}
+.dispreset{margin-top:9px; align-self:flex-start; background:none; border:1px solid var(--rule);
+  border-radius:5px; padding:5px 10px; font-size:var(--t-2); color:var(--ink-2); cursor:pointer}
+.dispreset:hover{background:var(--sunk); color:var(--ink)}
 .rowlist{display:flex; flex-direction:column; gap:1px}
 .row{display:flex; align-items:center; gap:8px; padding:5px 6px; border-radius:4px;
   cursor:pointer; user-select:none; font-size:var(--t-3)}
@@ -194,9 +201,9 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
   pointer-events:none; stroke-linejoin:round}
 .county.hov{fill:var(--land-2)}
 .county.sel{fill:var(--indigo-wash)}
-.clab{font-size:7.4px; fill:var(--muted); text-anchor:middle; pointer-events:none;
-  font-weight:500; letter-spacing:.02em; paint-order:stroke;
-  stroke:var(--plat); stroke-linejoin:round; stroke-opacity:.85}
+.clab{font-size:7.4px; fill:var(--ink-2); text-anchor:middle; pointer-events:none;
+  font-weight:600; letter-spacing:.02em; paint-order:stroke;
+  stroke:var(--plat); stroke-linejoin:round; stroke-opacity:1}
 .cbord{fill:none; stroke:var(--rule); stroke-width:.9; vector-effect:non-scaling-stroke;
   pointer-events:none}
 #L-cbord.wash .cbord{stroke:var(--ink); stroke-opacity:.17; stroke-width:3.2}
@@ -233,7 +240,7 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 .tick.bl{bottom:11px; left:11px; border-right:0; border-top:0}
 .tick.br{bottom:11px; right:11px; border-left:0; border-top:0}
 
-.zoom{position:absolute; right:16px; top:16px; transition:right .22s cubic-bezier(.22,.7,.3,1); display:flex; flex-direction:column;
+.zoom{display:flex; flex-direction:row; pointer-events:auto;
   gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:6px;
   overflow:hidden; box-shadow:var(--shadow)}
 .zoom button{width:30px; height:29px; background:var(--panel); border:0; cursor:pointer;
@@ -241,19 +248,15 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 .zoom button:hover{background:var(--indigo-wash); color:var(--ink)}
 .zoom button:last-child{font-size:var(--t-1); font-weight:600}
 
-.stage.open .zoom{right:392px}
-@media (max-width:900px){
-  .stage.open .zoom{left:16px; right:auto}
-  .stage.open:has(.seam:not([hidden])) .zoom{top:calc(28px + var(--seam-h, 60px))}
-}
 .seam{
-  position:absolute; left:16px; right:16px; top:14px; z-index:26;
+  flex:0 1 400px; min-width:260px; margin-left:auto; pointer-events:auto;
   display:flex; align-items:center; gap:12px;
   background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--gold);
   border-radius:9px; padding:10px 12px; font-size:var(--t-2); color:var(--ink-2);
   box-shadow:var(--shadow); max-width:640px;
 }
 .seam[hidden]{display:none}
+.stage.open .seam{display:none}
 .seam b{color:var(--ink); font-weight:600}
 .seam button{
   margin-left:auto; flex:none; background:none; border:0; cursor:pointer;
@@ -263,16 +266,21 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 .seam button.next{color:var(--ink); border:1px solid var(--rule); font-size:var(--t-2);
   padding:5px 10px}
 .seam #seamX{margin-left:0}
-.hud{position:absolute; left:16px; bottom:14px; display:flex; gap:7px;
-  align-items:center; pointer-events:none; flex-wrap:wrap; max-width:calc(100% - 32px)}
+.mapfoot{position:absolute; left:16px; bottom:14px; display:flex; flex-direction:column;
+  align-items:flex-start; gap:8px; pointer-events:none; max-width:calc(100% - 32px)}
 @media (min-width:901px){
-  .stage.open .hud{max-width:calc(100% - 408px)}
+  .stage.open .mapfoot{max-width:calc(100% - 408px)}
 }
+.footrow{display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; max-width:100%}
+.footrow .chip.paid{display:flex; align-items:center}
+.mapbtn{pointer-events:auto; background:var(--panel); border:1px solid var(--rule);
+  border-radius:6px; box-shadow:var(--shadow); padding:0 12px; cursor:pointer;
+  font-size:var(--t-2); font-weight:600; color:var(--ink-2)}
+.mapbtn:hover{background:var(--indigo-wash); color:var(--ink)}
 .chip{background:var(--panel); border:1px solid var(--rule); border-radius:5px;
   padding:3.5px 9px; font-size:var(--t-2); color:var(--ink-2); box-shadow:var(--shadow);
   white-space:nowrap}
 .chip b{color:var(--ink); font-weight:600}
-#hudChips{display:contents}
 .chip.paid{pointer-events:auto; white-space:normal; max-width:100%}
 .chip.paid a{color:var(--ink); font-weight:600; text-decoration:underline;
   text-underline-offset:2px; display:inline-block; padding:5px 2px; margin:-5px -2px}
@@ -294,7 +302,7 @@ aside{
 aside.on{transform:none; visibility:visible; pointer-events:auto;
   transition:transform .22s cubic-bezier(.22,.7,.3,1), visibility 0s}
 @media (prefers-reduced-motion:reduce){
-  aside,aside.on,.rail,.zoom,.fold>summary::before{transition:none}
+  aside,aside.on,.fold>summary::before{transition:none}
 }
 .ihead{display:flex; align-items:flex-start; gap:12px; padding:16px 16px 13px;
   border-bottom:1px solid var(--rule)}
@@ -547,29 +555,21 @@ footer a{color:var(--muted)}
   .brand h1{font-size:var(--t-4)}
   .searchwrap{display:none}
   .spacer{display:block}
-  #themeBtn{font-size:0; padding:5px 8px}
-  #themeBtn::before{content:"\25D0"; font-size:var(--t-4); line-height:1}
-  #aboutBtn{padding:5px 9px}
-  #railBtn{padding:5px 10px; font-size:var(--t-4); line-height:1}
-  #railBtn::before{content:"\2630"}
-  #railBtn{font-size:0}
-  #railBtn::before{font-size:var(--t-4)}
   #locBtn{font-size:var(--t-2); padding:5px 9px; white-space:nowrap}
 }
 @media (max-width:400px){
   header{gap:5px}
   .brand h1{font-size:var(--t-3)}
   #locBtn{font-size:var(--t-2); padding:5px 6px}
-  #aboutBtn{padding:5px 6px; font-size:var(--t-2)}
-  #themeBtn{padding:5px 6px}
 }
 
-.railtoggle{display:none}
 
 @media (max-width:900px){
   .row{min-height:44px; padding:6px 8px}
   .row input{width:18px; height:18px}
-  .seg button{min-height:44px}
+  .step{min-height:44px; min-width:44px}
+  .mapbtn{min-height:44px}
+  .dispbtn,.dispreset{min-height:44px}
   .ghost{min-height:44px; padding:8px 13px}
   .zoom button{width:44px; height:44px; font-size:var(--t-4)}
   .zoom button:last-child{font-size:var(--t-1)}
@@ -587,43 +587,13 @@ footer a{color:var(--muted)}
   .chip.paid a{padding:13px 2px; margin:-13px -2px}
   .disclaimer a{padding:15px 4px; margin:-15px -4px}}
 @media (max-width:900px){
-  .rail{position:absolute; left:0; top:0; bottom:0; z-index:28; transform:translateX(-101%);
-    transition:transform .2s}
-  .rail.on{transform:none}
-  .railtoggle{display:block}
-  .brand .sub{display:none}
   .brand .full{position:absolute; width:1px; height:1px; overflow:hidden;
     clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap}
   .brand .short{display:inline}
 }
 @media (max-width:560px){
-  .rail{
-    left:0; right:0; top:auto; bottom:0;
-    width:auto; min-width:0; max-width:none; height:auto; max-height:50vh;
-    border-right:0; border-top:1px solid var(--rule);
-    border-radius:14px 14px 0 0; transform:translateY(101%);
-    box-shadow:0 -8px 30px rgba(0,0,0,.28); padding-top:0;
-    padding-bottom:calc(20px + env(safe-area-inset-bottom));
-  }
-  .rail.on{transform:none}
-  .railgrip{
-    display:flex; align-items:center; justify-content:space-between;
-    position:sticky; top:0; z-index:2; background:var(--panel);
-    padding:4px 6px 6px; border-radius:14px 14px 0 0;
-    touch-action:none; cursor:grab; user-select:none; -webkit-user-select:none;
-  }
-  .railgrip .bar{flex:none; width:38px; height:4px; border-radius:2px; background:var(--rule)}
-  .railgrip button{
-    width:44px; height:44px; flex:none; display:grid; place-items:center;
-    background:none; border:0; border-radius:8px; color:var(--muted); cursor:pointer;
-  }
-  .railgrip button:hover{color:var(--ink); background:var(--sunk)}
-  .railgrip button:focus-visible{outline:2px solid var(--indigo); outline-offset:-2px}
-  .railgrip svg{width:18px; height:18px; fill:none; stroke:currentColor;
-    stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
-  .zoom, .stage.open .zoom{left:16px; right:auto}
-  .stage:has(.seam:not([hidden])) .zoom{top:calc(28px + var(--seam-h, 60px))}
-  .stage.open .hud{max-width:calc(100% - 164px)}}
+  .stage.open .mapfoot{max-width:calc(100% - 164px)}
+   }
 
 .pop{position:fixed; inset:0; z-index:60; display:flex}
 .pop[hidden]{display:none}
@@ -673,7 +643,7 @@ footer a{color:var(--muted)}
     --shadow:none;
   }
   body{height:auto; overflow:visible}
-  header, .rail, .zoom, .hud, .tip, .tick, .seam, aside, .pop{display:none}
+  header, .topbar, .mapfoot, .tip, .tick, aside, .pop{display:none}
   main[inert]{display:none}
   .vdoor{position:static; background:none; padding:0; overflow:visible; display:block}
   .vdoor[hidden]{display:none}
@@ -718,13 +688,11 @@ footer a{color:var(--muted)}
 
 <header id="pageHeader">
   <a class="skip" href="#map">Skip To The Map</a>
-  <a class="skip" href="#rail">Skip To The Controls</a>
+  <a class="skip" href="#selTile">Skip To The Controls</a>
   <div class="brand">
     <h1><span class="full">SC Congressional Districts &amp; Precincts</span><span class="short" aria-hidden="true">SC Precincts</span></h1>
-    <span class="sub">South Carolina · 2026</span>
   </div>
-  <button class="ghost railtoggle" id="railBtn" aria-label="Toggle controls"
-          aria-expanded="false" aria-controls="rail">Controls</button>
+  <button class="ghost" id="locBtn">Where Do I Vote?</button>
   <div class="searchwrap">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
     <input id="q" type="search" autocomplete="off" spellcheck="false"
@@ -735,41 +703,40 @@ footer a{color:var(--muted)}
     <div class="results" id="res" role="listbox" aria-label="Search results"></div>
   </div>
   <div class="spacer"></div>
-  <button class="ghost" id="locBtn">Where Do I Vote?</button>
-  <button class="ghost" id="themeBtn" aria-label="Switch theme">Theme</button>
-  <button class="ghost" id="aboutBtn">About</button>
 </header>
 
 <main>
-  <nav class="rail" id="rail" tabindex="-1" aria-label="Map controls">
-    <div class="railgrip" id="railGrip">
-      <button type="button" id="railReset" aria-label="Reset the controls to their defaults" title="Reset">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>
-      </button>
-      <span class="bar" aria-hidden="true"></span>
-      <button type="button" id="railX" aria-label="Close the controls" title="Close">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div class="grp">
-      <h2>Click Selects</h2>
-      <div class="seg" id="lvl" role="radiogroup" aria-label="What clicking the map selects">
-        <button type="button" role="radio" data-lvl="district" aria-checked="true"  tabindex="0">Districts</button>
-        <button type="button" role="radio" data-lvl="county"   aria-checked="false" tabindex="-1">Counties</button>
-        <button type="button" role="radio" data-lvl="precinct" aria-checked="false" tabindex="-1">Precincts</button>
-      </div>
-      <p class="note" id="lvlNote">Click a district to open it.</p>
-    </div>
-
-    <div class="grp">
-      <h2>Display</h2>
-      <div class="rowlist" id="dlist"></div>
-      <label class="row"><input type="checkbox" id="lParty">Party Colors</label>
-      <div class="legend" id="legend" style="margin-top:11px"></div>
-    </div>
-  </nav>
 
   <div class="stage" id="stage">
+    <div class="topbar">
+      <nav class="tiles" aria-label="Map controls">
+        <div class="tile sel" id="selTile" tabindex="-1" role="group" aria-labelledby="selBtn">
+          <button type="button" class="dispbtn" id="selBtn" aria-expanded="false" aria-controls="selPanel">Click Selects<span class="cur" id="lvlCur">Districts</span></button>
+          <div class="selpanel" id="selPanel" hidden>
+            <div class="stepper" id="lvl" role="group" aria-label="What clicking the map selects">
+              <button type="button" class="step" id="lvlPrev" aria-label="Previous: Precincts">&#8249;</button>
+              <output class="stepval" id="lvlVal" data-lvl="district" aria-live="polite">Districts</output>
+              <button type="button" class="step" id="lvlNext" aria-label="Next: Counties">&#8250;</button>
+            </div>
+          </div>
+          <p class="sronly" id="ctlLive" role="status" aria-live="polite" aria-atomic="true"></p>
+        </div>
+        <div class="tile disp">
+          <button type="button" class="dispbtn" id="dispBtn" aria-expanded="false" aria-controls="dispPanel">Display</button>
+          <div class="disppanel" id="dispPanel" hidden>
+            <div class="rowlist" id="dlist"></div>
+            <label class="row"><input type="checkbox" id="lParty">Party Colors</label>
+            <div class="legend" id="legend"></div>
+            <button type="button" class="dispreset" id="dispReset" aria-label="Reset the controls to their defaults">Reset</button>
+          </div>
+        </div>
+      </nav>
+      <div class="seam" id="seam" hidden>
+        <span id="seamText"></span>
+        <button type="button" id="seamNext" class="next">Next</button>
+        <button type="button" id="seamX" aria-label="Dismiss">✕</button>
+      </div>
+    </div>
     <svg id="map" tabindex="-1" aria-label="Map of South Carolina" aria-describedby="mapHelp"></svg>
     <p class="sronly" id="mapHelp">Arrow keys move between counties or between
       districts, whichever the level control is set to. Enter opens the one you are
@@ -778,19 +745,16 @@ footer a{color:var(--muted)}
       search, or from its county's precinct list.</p>
     <span class="tick tl"></span><span class="tick tr"></span>
     <span class="tick bl"></span><span class="tick br"></span>
-    <div class="zoom">
-      <button id="zin"  aria-label="Zoom in">+</button>
-      <button id="zout" aria-label="Zoom out">−</button>
-      <button id="zfit" aria-label="Fit the whole state">FIT</button>
-    </div>
-    <div class="seam" id="seam" hidden>
-      <span id="seamText"></span>
-      <button type="button" id="seamNext" class="next">Next</button>
-      <button type="button" id="seamX" aria-label="Dismiss">✕</button>
-    </div>
-    <div class="hud" id="hud">
-      <span id="hudChips" role="status" aria-live="polite" aria-atomic="true"></span>
-      <span class="chip paid" id="paid" hidden></span>
+    <div class="mapfoot" id="mapfoot">
+      <div class="zoom">
+        <button id="zin"  aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">−</button>
+        <button id="zfit" aria-label="Fit the whole state">FIT</button>
+      </div>
+      <div class="footrow">
+        <span class="chip paid" id="paid" hidden></span>
+        <button type="button" class="mapbtn" id="aboutBtn">About</button>
+      </div>
     </div>
     <div class="tip" id="tip"></div>
   </div>
@@ -1119,15 +1083,10 @@ function renderDistList() {
 function renderHud() {
   let vis = 0;
   for (const d of DATA.districts) if (!S.hidden.has(d.num)) vis++;
-  const cv = DATA.counties.length, pv = PRE.length;
-  const html =
-    `<span class="chip"><b>${cv}</b> counties</span>` +
-    `<span class="chip"><b>${vis}</b> of 7 Districts Drawn</span>` +
-    `<span class="chip"><b>${num(pv)}</b> precincts</span>` +
-    `<span class="chip mono">1000 × 640 · equirect.</span>`;
+  const html = String(vis);
   if (html === hudHTML) return;
   hudHTML = html;
-  $('#hudChips').innerHTML = html;
+  $('#ctlLive').textContent = vis + ' of 7 districts drawn.';
 }
 </script>
 
@@ -1136,14 +1095,20 @@ function renderHud() {
 let capEls = null, capW = null, capBox = null, capArea = null, capOrder = null;
 let capX = null, capY = null, capPath = null;
 const capPt = svg.createSVGPoint();
+function atUnitScale(fn) {
+  const view = root.getAttribute('transform');
+  root.setAttribute('transform', 'scale(1)');
+  try { return fn(); }
+  finally { if (view == null) root.removeAttribute('transform'); else root.setAttribute('transform', view); }
+}
 function measureLabels() {
   capEls = [...layer.clab.children];
-  capW = capEls.map(t => {
+  capW = atUnitScale(() => capEls.map(t => {
     t.style.display = '';
     t.style.fontSize = '10px';
     let w = 0; try { w = t.getComputedTextLength(); } catch (_) {}
     return w / 10;
-  });
+  }));
   capBox = []; capArea = [];
   if (!capX) {
     capX = capEls.map(t => +t.getAttribute('x'));
@@ -1160,8 +1125,8 @@ function measureLabels() {
   }
   capOrder = capArea.map((a, i) => i).sort((x, y) => capArea[y] - capArea[x]);
 }
-const LAB_FLOOR = 8.5, LAB_BASE = 11.5, LAB_CAP = 26;
-const DLAB_REL = 2.05;
+const LAB_FLOOR = 8.5, LAB_BASE = 13, LAB_CAP = 26;
+const DLAB_REL = 2.2;
 function labelTarget() {
   return Math.min(LAB_CAP, Math.max(LAB_FLOOR + 1, LAB_BASE * Math.pow(S.k, .35)));
 }
@@ -1174,12 +1139,12 @@ const overlaps = (b, list) => list.some(p =>
 let dEls = null, dW = null, dX = null, dY = null;
 function measureNumerals() {
   dEls = [...layer.dlab.children];
-  dW = dEls.map(t => {
+  dW = atUnitScale(() => dEls.map(t => {
     t.style.display = '';
     t.style.fontSize = '10px';
     let w = 0; try { w = t.getComputedTextLength(); } catch (_) {}
     return w / 10;
-  });
+  }));
   if (!dX) {
     dX = dEls.map(t => +t.getAttribute('x'));
     dY = dEls.map(t => +t.getAttribute('y'));
@@ -1197,28 +1162,7 @@ function placeNumerals(eff, placed) {
     t.style.fontSize = fs + 'px';
     t.style.strokeWidth = (fs * .26) + 'px';
     const w = (dW[i] > 0 ? dW[i] : .58) * fs;
-    const x = dX[i], y = dY[i];
-    const LAD = [[0, 0]];
-    for (const oy of [-.85, .85, -1.7, 1.7, -2.5, 2.5])
-      for (const ox of [0, -1, 1, -1.9, 1.9])
-        LAD.push([ox * w, oy * fs]);
-    for (const ox of [-1, 1, -1.9, 1.9]) LAD.push([ox * w, 0]);
-    LAD.sort((a, b) => Math.hypot(a[0], a[1]) - Math.hypot(b[0], b[1]));
-    let box = boxOf(x, y, w, fs, pad), dx = 0, dy = 0;
-    for (const [ox, oy] of LAD) {
-      const b = boxOf(x + ox, y + oy, w, fs, pad);
-      if (overlaps(b, placed)) continue;
-      if (ox || oy) {
-        capPt.x = x + ox; capPt.y = y + oy - fs * .28;
-        let ok = false;
-        try { ok = distPaths[i].isPointInFill(capPt); } catch (_) { ok = false; }
-        if (!ok) continue;
-      }
-      box = b; dx = ox; dy = oy; break;
-    }
-    t.setAttribute('x', x + dx);
-    t.setAttribute('y', y + dy);
-    placed.push(box);
+    placed.push(boxOf(dX[i], dY[i], w, fs, pad));
   }
 }
 
@@ -1230,8 +1174,8 @@ function layoutLabels(eff) {
   labKey = key;
   LAB.passes++;
   const placed = [];
-  sizeLabels(eff, placed);
   placeNumerals(eff, placed);
+  sizeLabels(eff, placed);
 }
 
 function sizeLabels(eff, placed) {
@@ -1271,7 +1215,20 @@ function sizeLabels(eff, placed) {
 }
 let svgRect = null;
 const svgBox = () => svgRect || svg.getBoundingClientRect();
+const PAN_KEEP = 0.4;
+function clampView() {
+  if (!STATE_BOX) { try { STATE_BOX = bboxOf(layer.outline.firstChild); } catch (_) {} }
+  const b = STATE_BOX;
+  if (!b || !(b.w > 0) || !(b.h > 0)) return;
+  const r = svgBox();
+  if (!(r.width > 0 && r.height > 0)) return;
+  const sc = Math.min(r.width / W, r.height / H);
+  const ax = PAN_KEEP * r.width / sc, ay = PAN_KEEP * r.height / sc, k = S.k;
+  S.tx = Math.min(W / 2 + ax - k * b.x, Math.max(W / 2 - ax - k * (b.x + b.w), S.tx));
+  S.ty = Math.min(H / 2 + ay - k * b.y, Math.max(H / 2 - ay - k * (b.y + b.h), S.ty));
+}
 function applyView() {
+  clampView();
   root.setAttribute('transform', `translate(${S.tx} ${S.ty}) scale(${S.k})`);
   const r = svgBox();
   const sc = (r.width > 0 && r.height > 0) ? Math.min(r.width / W, r.height / H) : 1;
@@ -1335,8 +1292,7 @@ let drag = null, pinch = null, tapBlock = 0;
 const ptrs = new Map();
 const ptrList = () => [...ptrs.values()];
 function dismissFurniture() {
-  if (typeof setRail === 'function') setRail(false);
-  else { const rail = document.getElementById('rail'); if (rail) rail.classList.remove('on'); }
+  if (SHEETQ.matches && typeof setDisp === 'function') { setDisp(false); setSel(false); }
   if (typeof resShow === 'function') resShow(false);
   else { const rd = document.getElementById('res'); if (rd) rd.classList.remove('on'); }
 }
@@ -1629,6 +1585,10 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (!vote.hidden) return;
+  const dp = $('#dispPanel');
+  if (dp && !dp.hidden) { setDisp(false); $('#dispBtn').focus(); return; }
+  const sp = $('#selPanel');
+  if (sp && !sp.hidden) { setSel(false); $('#selBtn').focus(); return; }
   const rs = $('#res');
   if (rs && rs.classList.contains('on')) {
     if (typeof resShow === 'function') resShow(false); else rs.classList.remove('on');
@@ -1930,41 +1890,31 @@ function openPrecinct(id) {
 
 <script>
 "use strict";
-const LVLNOTE = {
-  county:   'Click a county to open it.',
-  district: 'Click a district to open it.',
-  precinct: 'Zoom in, then click a precinct. Or find one by name in search.'
-};
-function wireRadioGroup(sel, pick) {
-  const g = $(sel), opts = () => [...g.children];
-  const choose = b => { if (!b) return; pick(b); paint(); b.focus(); };
-  g.addEventListener('click', e => choose(e.target.closest('button[role="radio"]')));
-  g.addEventListener('keydown', e => {
-    const o = opts(), i = o.indexOf(document.activeElement);
-    if (i < 0) return;
-    let j = -1;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % o.length;
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + o.length) % o.length;
-    else if (e.key === 'Home') j = 0;
-    else if (e.key === 'End') j = o.length - 1;
-    else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); choose(o[i]); return; }
-    if (j < 0) return;
-    e.preventDefault(); choose(o[j]);
-  });
-}
-wireRadioGroup('#lvl', b => {
-  S.level = b.dataset.lvl;
-  $('#lvlNote').textContent = LVLNOTE[S.level];
+const LEVELS = ['district', 'county', 'precinct'];
+const LVLNAME = {district: 'Districts', county: 'Counties', precinct: 'Precincts'};
+function setLevel(l) { if (!LVLNAME[l] || S.level === l) return; S.level = l; paint(); }
+function stepLevel(d) { setLevel(LEVELS[(LEVELS.indexOf(S.level) + d + LEVELS.length) % LEVELS.length]); }
+$('#lvlPrev').onclick = () => stepLevel(-1);
+$('#lvlNext').onclick = () => stepLevel(1);
+$('#lvl').addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') { e.preventDefault(); stepLevel(-1); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); stepLevel(1); }
 });
 $('#lParty').onchange = e => { S.colourBy = e.target.checked ? 'party' : 'district'; paint(); };
-function setRail(on) {
-  const rail = $('#rail');
-  if (rail.classList.contains('on') === on) return;
-  rail.classList.toggle('on', on);
-  $('#railBtn').setAttribute('aria-expanded', on ? 'true' : 'false');
+function setDisp(on) {
+  const p = $('#dispPanel');
+  if (p.hidden === !on) return;
+  p.hidden = !on;
+  $('#dispBtn').setAttribute('aria-expanded', on ? 'true' : 'false');
 }
-$('#railBtn').onclick = () => setRail(!$('#rail').classList.contains('on'));
-$('#railX').onclick = () => setRail(false);
+$('#dispBtn').onclick = () => setDisp($('#dispPanel').hidden);
+function setSel(on) {
+  const p = $('#selPanel');
+  if (p.hidden === !on) return;
+  p.hidden = !on;
+  $('#selBtn').setAttribute('aria-expanded', on ? 'true' : 'false');
+}
+$('#selBtn').onclick = () => setSel($('#selPanel').hidden);
 const CONTROL_DEFAULTS = {level: 'district', colourBy: 'district'};
 function resetControls() {
   S.level = CONTROL_DEFAULTS.level; S.colourBy = CONTROL_DEFAULTS.colourBy;
@@ -1972,47 +1922,8 @@ function resetControls() {
   paint();
   say('Controls reset to their defaults.');
 }
-$('#railReset').onclick = resetControls;
-{
-  const grip = $('#railGrip'), sheet = $('#rail');
-  let gd = null;
-  grip.addEventListener('pointerdown', e => {
-    if (e.target.closest('button')) return;
-    gd = {y: e.clientY, dy: 0};
-    try { grip.setPointerCapture(e.pointerId); } catch (_) {}
-    sheet.style.transition = 'none';
-  });
-  grip.addEventListener('pointermove', e => {
-    if (!gd) return;
-    gd.dy = Math.max(0, e.clientY - gd.y);
-    sheet.style.transform = `translateY(${gd.dy}px)`;
-  });
-  const end = () => {
-    if (!gd) return;
-    const dy = gd.dy; gd = null;
-    sheet.style.transition = ''; sheet.style.transform = '';
-    if (dy > Math.min(80, sheet.getBoundingClientRect().height * .25)) setRail(false);
-  };
-  grip.addEventListener('pointerup', end);
-  grip.addEventListener('pointercancel', end);
-}
+$('#dispReset').onclick = resetControls;
 
-$('#themeBtn').onclick = () => {
-  const cur = document.documentElement.getAttribute('data-theme');
-  const dark = cur ? cur === 'dark'
-    : matchMedia('(prefers-color-scheme: dark)').matches;
-  document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
-  const tc = document.querySelector('meta[name="theme-color"]');
-  if (tc) tc.setAttribute('content', dark ? '#E4E7EB' : '#0C111C');
-  try { localStorage.setItem('plat-theme', dark ? 'light' : 'dark'); } catch (_) {}
-  themeLabel();
-};
-function themeLabel() {
-  const cur = document.documentElement.getAttribute('data-theme');
-  const dark = cur ? cur === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  $('#themeBtn').setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
-}
-themeLabel();
 
 const INDEX = [];
 for (const c of DATA.counties)
@@ -2188,19 +2099,17 @@ $('#aboutBtn').onclick = () => {
 };
 
 function syncControls() {
-  for (const [sel, key, prop] of [['#lvl', 'level', 'lvl']]) {
-    for (const x of $(sel).children) {
-      const on = x.dataset[prop] === S[key];
-      x.setAttribute('aria-checked', on ? 'true' : 'false');
-      x.tabIndex = on ? 0 : -1;
-    }
+  const v = $('#lvlVal'), name = LVLNAME[S.level];
+  if (v.dataset.lvl !== S.level) {
+    v.dataset.lvl = S.level; v.textContent = name; $('#lvlCur').textContent = name;
+    const i = LEVELS.indexOf(S.level);
+    $('#lvlPrev').setAttribute('aria-label', 'Previous: ' + LVLNAME[LEVELS[(i + 2) % 3]]);
+    $('#lvlNext').setAttribute('aria-label', 'Next: ' + LVLNAME[LEVELS[(i + 1) % 3]]);
   }
   $('#lParty').checked = S.colourBy === 'party';
-  $('#lvlNote').textContent = LVLNOTE[S.level];
 }
 const _paint = paint;
 paint = function () { _paint(); syncControls(); };
-$('#lvlNote').textContent = LVLNOTE[S.level];
 paint(); fit();
 const HOME_DISTRICT = 1;
 function homeView() {
@@ -2507,7 +2416,7 @@ const TIPS = [
   'Drag to move the map, scroll or pinch to zoom, and <b>FIT</b> brings the whole state back. '
   + '<b>Where Do I Vote?</b> in the header finds your polling place.',
   '<b>Click Selects</b> chooses what a click opens: a district, a county or a precinct. '
-  + 'The district ticks choose which districts are drawn, and <b>Party Colors</b> recolors them.'
+  + '<b>Display</b> holds the district ticks, which choose the districts drawn, and <b>Party Colors</b>.'
 ];
 let tipAt = 0;
 function showTip(i) {
@@ -2515,13 +2424,7 @@ function showTip(i) {
   $('#seamText').innerHTML = TIPS[i];
   $('#seamNext').textContent = i < TIPS.length - 1 ? 'Next' : 'Done';
   $('#seam').hidden = false;
-  seamMeasure();
 }
-function seamMeasure() {
-  const s = $('#seam');
-  if (!s.hidden) stage.style.setProperty('--seam-h', s.offsetHeight + 'px');
-}
-window.addEventListener('resize', seamMeasure);
 $('#seamNext').onclick = () => {
   if (tipAt < TIPS.length - 1) showTip(tipAt + 1); else $('#seam').hidden = true;
 };
@@ -2532,8 +2435,8 @@ document.addEventListener('keydown', e => {
 });
 if (DATA.sponsor && DATA.sponsor.name) {
   const p = $('#paid');
-  p.innerHTML = 'Paid for by <a href="' + esc(DATA.sponsor.url) + '" target="_blank" rel="noopener">'
-              + esc(DATA.sponsor.name) + '</a>';
+  p.innerHTML = '<span>Paid for by <a href="' + esc(DATA.sponsor.url) + '" target="_blank" rel="noopener">'
+              + esc(DATA.sponsor.name) + '</a></span>';
   p.hidden = false;
 }
 if (DATA.disclaimer) {
