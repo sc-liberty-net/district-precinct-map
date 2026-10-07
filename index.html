@@ -133,27 +133,21 @@ header{
 main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 .topbar{position:absolute; top:14px; left:16px; right:16px; z-index:24;
   display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px 10px; pointer-events:none}
-.tiles{display:flex; flex-direction:column; align-items:stretch; gap:8px; flex:none; width:236px}
+.tiles{display:flex; flex-direction:column; align-items:stretch; gap:8px; flex:none; width:172px}
 .tile{pointer-events:auto; background:var(--panel); border:1px solid var(--rule);
   border-radius:7px; box-shadow:var(--shadow)}
-#selBtn{justify-content:flex-start}
+#selBtn{justify-content:flex-start; gap:5px; padding-left:9px; padding-right:9px; white-space:nowrap}
 #selBtn .cur{margin-left:auto; color:var(--muted); font-weight:500}
-.selpanel{padding:2px 8px 8px}
-.selpanel[hidden]{display:none}
-.stepper{display:flex; align-items:center; gap:2px; background:var(--sunk);
-  border-radius:6px; padding:2px}
-.step{flex:none; width:36px; height:32px; display:grid; place-items:center;
-  background:var(--panel); border:0; border-radius:4px; cursor:pointer;
-  color:var(--ink-2); font-size:20px; line-height:1}
-.step:hover{background:var(--indigo-wash); color:var(--ink)}
-.stepval{flex:1; text-align:center; font-size:var(--t-3); font-weight:600; color:var(--ink)}
+#selBtn::after{content:"\203A"; font-size:var(--t-3); line-height:1}
 .tile.disp{position:relative}
 .dispbtn{display:flex; align-items:center; justify-content:space-between; width:100%;
   gap:7px; background:none; border:0; cursor:pointer;
   padding:8px 11px; font-size:var(--t-2); font-weight:600; color:var(--ink-2); border-radius:7px}
 .dispbtn::after{content:"\25BE"; font-size:var(--t-1); color:var(--muted)}
 .dispbtn[aria-expanded="true"]::after{content:"\25B4"}
-.dispbtn:hover{background:var(--sunk); color:var(--ink)}
+@media (hover:hover){
+  .dispbtn:hover{color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--indigo)}
+}
 .disppanel{position:absolute; top:calc(100% + 6px); left:0; right:0;
   background:var(--panel); border:1px solid var(--rule); border-radius:7px;
   box-shadow:var(--shadow); padding:8px 8px 10px;
@@ -168,7 +162,11 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 }
 .disppanel::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 .disppanel .legend:not(:empty){margin:8px 6px 2px}
-.dispreset{margin-top:9px; align-self:flex-start; background:none; border:1px solid var(--rule);
+.dispfoot{display:flex; align-items:stretch; justify-content:space-between; gap:8px; margin-top:9px}
+.dispx{background:none; border:1px solid var(--rule); border-radius:5px; cursor:pointer;
+  color:var(--ink-2); font-size:var(--t-2); line-height:1; min-width:30px; padding:5px 8px}
+.dispx:hover{background:var(--sunk); color:var(--ink)}
+.dispreset{background:none; border:1px solid var(--rule);
   border-radius:5px; padding:5px 10px; font-size:var(--t-2); color:var(--ink-2); cursor:pointer}
 .dispreset:hover{background:var(--sunk); color:var(--ink)}
 .rowlist{display:flex; flex-direction:column; gap:1px}
@@ -567,9 +565,9 @@ footer a{color:var(--muted)}
 @media (max-width:900px){
   .row{min-height:44px; padding:6px 8px}
   .row input{width:18px; height:18px}
-  .step{min-height:44px; min-width:44px}
   .mapbtn{min-height:44px}
   .dispbtn,.dispreset{min-height:44px}
+  .dispx{min-height:44px; min-width:44px}
   .ghost{min-height:44px; padding:8px 13px}
   .zoom button{width:44px; height:44px; font-size:var(--t-4)}
   .zoom button:last-child{font-size:var(--t-1)}
@@ -710,24 +708,24 @@ footer a{color:var(--muted)}
   <div class="stage" id="stage">
     <div class="topbar">
       <nav class="tiles" aria-label="Map controls">
-        <div class="tile sel" id="selTile" tabindex="-1" role="group" aria-labelledby="selBtn">
-          <button type="button" class="dispbtn" id="selBtn" aria-expanded="false" aria-controls="selPanel">Click Selects<span class="cur" id="lvlCur">Districts</span></button>
-          <div class="selpanel" id="selPanel" hidden>
-            <div class="stepper" id="lvl" role="group" aria-label="What clicking the map selects">
-              <button type="button" class="step" id="lvlPrev" aria-label="Previous: Precincts">&#8249;</button>
-              <output class="stepval" id="lvlVal" data-lvl="district" aria-live="polite">Districts</output>
-              <button type="button" class="step" id="lvlNext" aria-label="Next: Counties">&#8250;</button>
-            </div>
-          </div>
+        <div class="tile sel" id="selTile" tabindex="-1">
+          <button type="button" class="dispbtn" id="selBtn" data-lvl="district"
+                  aria-label="Click Selects Districts. Next: Counties"
+                  title="What a click on the map opens. Now: Districts. Press for Counties">Click Selects<span class="cur" id="lvlCur">Districts</span></button>
           <p class="sronly" id="ctlLive" role="status" aria-live="polite" aria-atomic="true"></p>
         </div>
         <div class="tile disp">
-          <button type="button" class="dispbtn" id="dispBtn" aria-expanded="false" aria-controls="dispPanel">Display</button>
+          <button type="button" class="dispbtn" id="dispBtn" aria-expanded="false" aria-controls="dispPanel"
+                  title="Choose which districts are drawn, and color the map by party">Display</button>
           <div class="disppanel" id="dispPanel" hidden>
             <div class="rowlist" id="dlist"></div>
-            <label class="row"><input type="checkbox" id="lParty">Party Colors</label>
+            <label class="row" title="Color every district and its precincts by the party that holds the seat"><input type="checkbox" id="lParty">Party Colors</label>
             <div class="legend" id="legend"></div>
-            <button type="button" class="dispreset" id="dispReset" aria-label="Reset the controls to their defaults">Reset</button>
+            <div class="dispfoot">
+              <button type="button" class="dispreset" id="dispReset" aria-label="Reset the controls to their defaults"
+                      title="Put the controls back as they started: every district drawn, district colors, clicks open districts">Reset</button>
+              <button type="button" class="dispx" id="dispX" aria-label="Close Display" title="Close this panel">&#10005;</button>
+            </div>
           </div>
         </div>
       </nav>
@@ -1063,7 +1061,7 @@ function renderDistList() {
   if (!el.firstChild) {
     el.innerHTML = DATA.districts.map(d => {
       const c = CAND.get(d.num);
-      return `<label class="row"><input type="checkbox" data-d="${d.num}">
+      return `<label class="row" title="Show or hide SC-0${d.num}: its outline, shading and precincts"><input type="checkbox" data-d="${d.num}">
       <span class="sw"></span>
       <span>SC-0${d.num}</span></label>`;
     }).join('');
@@ -1292,7 +1290,7 @@ let drag = null, pinch = null, tapBlock = 0;
 const ptrs = new Map();
 const ptrList = () => [...ptrs.values()];
 function dismissFurniture() {
-  if (SHEETQ.matches && typeof setDisp === 'function') { setDisp(false); setSel(false); }
+  if (SHEETQ.matches && typeof setDisp === 'function') setDisp(false);
   if (typeof resShow === 'function') resShow(false);
   else { const rd = document.getElementById('res'); if (rd) rd.classList.remove('on'); }
 }
@@ -1587,8 +1585,6 @@ document.addEventListener('keydown', e => {
   if (!vote.hidden) return;
   const dp = $('#dispPanel');
   if (dp && !dp.hidden) { setDisp(false); $('#dispBtn').focus(); return; }
-  const sp = $('#selPanel');
-  if (sp && !sp.hidden) { setSel(false); $('#selBtn').focus(); return; }
   const rs = $('#res');
   if (rs && rs.classList.contains('on')) {
     if (typeof resShow === 'function') resShow(false); else rs.classList.remove('on');
@@ -1894,12 +1890,10 @@ const LEVELS = ['district', 'county', 'precinct'];
 const LVLNAME = {district: 'Districts', county: 'Counties', precinct: 'Precincts'};
 function setLevel(l) { if (!LVLNAME[l] || S.level === l) return; S.level = l; paint(); }
 function stepLevel(d) { setLevel(LEVELS[(LEVELS.indexOf(S.level) + d + LEVELS.length) % LEVELS.length]); }
-$('#lvlPrev').onclick = () => stepLevel(-1);
-$('#lvlNext').onclick = () => stepLevel(1);
-$('#lvl').addEventListener('keydown', e => {
-  if (e.key === 'ArrowLeft') { e.preventDefault(); stepLevel(-1); }
-  else if (e.key === 'ArrowRight') { e.preventDefault(); stepLevel(1); }
-});
+$('#selBtn').onclick = () => {
+  stepLevel(1);
+  say('Click Selects ' + LVLNAME[S.level] + '. A click on the map opens ' + LVLNAME[S.level].toLowerCase() + '.');
+};
 $('#lParty').onchange = e => { S.colourBy = e.target.checked ? 'party' : 'district'; paint(); };
 function setDisp(on) {
   const p = $('#dispPanel');
@@ -1908,13 +1902,6 @@ function setDisp(on) {
   $('#dispBtn').setAttribute('aria-expanded', on ? 'true' : 'false');
 }
 $('#dispBtn').onclick = () => setDisp($('#dispPanel').hidden);
-function setSel(on) {
-  const p = $('#selPanel');
-  if (p.hidden === !on) return;
-  p.hidden = !on;
-  $('#selBtn').setAttribute('aria-expanded', on ? 'true' : 'false');
-}
-$('#selBtn').onclick = () => setSel($('#selPanel').hidden);
 const CONTROL_DEFAULTS = {level: 'district', colourBy: 'district'};
 function resetControls() {
   S.level = CONTROL_DEFAULTS.level; S.colourBy = CONTROL_DEFAULTS.colourBy;
@@ -1923,6 +1910,7 @@ function resetControls() {
   say('Controls reset to their defaults.');
 }
 $('#dispReset').onclick = resetControls;
+$('#dispX').onclick = () => { setDisp(false); $('#dispBtn').focus(); };
 
 
 const INDEX = [];
@@ -2099,12 +2087,12 @@ $('#aboutBtn').onclick = () => {
 };
 
 function syncControls() {
-  const v = $('#lvlVal'), name = LVLNAME[S.level];
-  if (v.dataset.lvl !== S.level) {
-    v.dataset.lvl = S.level; v.textContent = name; $('#lvlCur').textContent = name;
-    const i = LEVELS.indexOf(S.level);
-    $('#lvlPrev').setAttribute('aria-label', 'Previous: ' + LVLNAME[LEVELS[(i + 2) % 3]]);
-    $('#lvlNext').setAttribute('aria-label', 'Next: ' + LVLNAME[LEVELS[(i + 1) % 3]]);
+  const b = $('#selBtn'), name = LVLNAME[S.level];
+  if (b.dataset.lvl !== S.level) {
+    const next = LVLNAME[LEVELS[(LEVELS.indexOf(S.level) + 1) % LEVELS.length]];
+    b.dataset.lvl = S.level; $('#lvlCur').textContent = name;
+    b.setAttribute('aria-label', 'Click Selects ' + name + '. Next: ' + next);
+    b.title = 'What a click on the map opens. Now: ' + name + '. Press for ' + next;
   }
   $('#lParty').checked = S.colourBy === 'party';
 }
