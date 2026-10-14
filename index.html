@@ -1279,7 +1279,18 @@ function sizeLabels(eff, placed) {
     const room = capBox[i] * .92;
     if (capW[i] > 0 && capW[i] * fs > room) fs = room / capW[i];
     if (!(fs > 0) || fs * eff < LAB_FLOOR) { t.style.display = 'none'; continue; }
-    const w = (capW[i] > 0 ? capW[i] : t.textContent.length * .55) * fs;
+    let aw = 0;
+    if (capW[i] > 0) {
+      t.style.display = '';
+      for (let k = 0; k < 3; k++) {
+        t.style.fontSize = fs + 'px';
+        aw = 0; try { aw = t.getComputedTextLength(); } catch (_) {}
+        if (!(aw > room)) break;
+        fs *= room / aw * .995; aw = 0;
+      }
+      if (!(fs > 0) || fs * eff < LAB_FLOOR) { t.style.display = 'none'; continue; }
+    }
+    const w = aw > 0 ? aw : (capW[i] > 0 ? capW[i] : t.textContent.length * .55) * fs;
     const x = capX[i], y = capY[i];
     const OFF = [[0, 0], [0, -1.3 * fs], [0, 1.3 * fs], [-.62 * w, 0], [.62 * w, 0],
                  [0, -2.6 * fs], [0, 2.6 * fs]];
@@ -1361,8 +1372,11 @@ function applyView() {
   viewBase = {tx: S.tx, ty: S.ty, k: S.k};
   viewSlide('');
 }
-if (document.fonts && document.fonts.ready)
-  document.fonts.ready.then(() => { capEls = null; dEls = null; MEASGEN++; applyView(); });
+if (document.fonts && document.fonts.ready) {
+  const remeasure = () => { capEls = null; dEls = null; MEASGEN++; applyView(); };
+  document.fonts.ready.then(remeasure);
+  if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', remeasure);
+}
 
 function zoomTo(k, cx, cy) {
   k = Math.max(1, Math.min(28, k));
