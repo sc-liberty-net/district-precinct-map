@@ -156,6 +156,10 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 .tiles{display:flex; flex-direction:column; align-items:stretch; gap:8px; flex:none; width:172px}
 .tile{pointer-events:auto; background:var(--panel); border:1px solid var(--rule);
   border-radius:7px; box-shadow:var(--shadow)}
+.topbar .tile{border-color:var(--indigo); box-shadow:var(--shadow), 0 0 0 3px color-mix(in srgb, var(--indigo) 30%, transparent)}
+@media (hover:hover){
+  .topbar .tile:hover{box-shadow:var(--shadow), 0 0 0 4px color-mix(in srgb, var(--indigo) 45%, transparent)}
+}
 #selBtn{justify-content:flex-start; gap:5px; padding-left:9px; padding-right:9px; white-space:nowrap}
 #selBtn .cur{margin-left:auto; color:var(--muted); font-weight:500}
 #selBtn::after{content:"\203A"; font-size:var(--t-3); line-height:1}
@@ -203,7 +207,8 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 
 .stage{flex:1; position:relative; background:var(--sea); min-width:0; overflow:hidden}
 #map{width:100%; height:100%; display:block; cursor:grab; touch-action:none; overflow:visible;
-  transform-origin:0 0; will-change:transform}
+  transform-origin:0 0; will-change:transform;
+  -webkit-tap-highlight-color:transparent}
 #map.drag{cursor:grabbing}
 .county{fill:var(--land); stroke:var(--hair); stroke-width:.6; vector-effect:non-scaling-stroke;
   pointer-events:none}
@@ -285,8 +290,8 @@ main{flex:1; display:flex; min-height:0; position:relative; overflow:hidden}
 .seam button.next{color:var(--ink); border:1px solid var(--rule); font-size:var(--t-2);
   padding:5px 10px}
 .seam #seamX{margin-left:0}
-.mapfoot{position:absolute; left:16px; bottom:14px; display:flex; flex-direction:column;
-  align-items:flex-start; gap:8px; pointer-events:none; max-width:calc(100% - 32px)}
+.mapfoot{position:absolute; left:16px; bottom:14px; display:flex; flex-direction:row;
+  align-items:stretch; gap:8px; pointer-events:none; max-width:calc(100% - 32px)}
 @media (min-width:901px){
   .stage.open .mapfoot{max-width:calc(100% - 408px)}
 }
@@ -454,6 +459,8 @@ footer a{color:var(--muted)}
 .or::before,.or::after{content:""; flex:1; height:1px; background:var(--rule)}
 .vfind input{width:100%; padding:13px 15px; font-size:var(--t-4); border-radius:9px;
   border:1px solid var(--rule); background:var(--panel); color:var(--ink)}
+.vfind input, .vfoot #vExplore{border-color:var(--indigo); box-shadow:0 0 0 3px color-mix(in srgb, var(--indigo) 30%, transparent)}
+.vfind input:hover, .vfoot #vExplore:hover{border-color:var(--indigo-2); box-shadow:0 0 0 4px color-mix(in srgb, var(--indigo) 45%, transparent)}
 .vfind input::placeholder{color:var(--muted)}
 .vnote{margin:8px 2px 0; font-size:var(--t-2); color:var(--muted); line-height:1.45}
 .vhits{margin-top:9px; display:flex; flex-direction:column; gap:1px;
@@ -546,7 +553,7 @@ footer a{color:var(--muted)}
 .vfoot button{background:var(--panel); border:1px solid var(--rule);
   color:var(--indigo); font-size:var(--t-4); font-weight:600; cursor:pointer;
   padding:14px 16px; border-radius:9px; width:100%; text-align:center}
-.vfoot button:hover{background:var(--indigo-wash); border-color:var(--indigo)}
+.vfoot button:hover{background:var(--indigo-wash); border-color:var(--indigo-2)}
 .vfoot .stamp{text-align:center}
 .stamp{font-size:var(--t-2); color:var(--muted)}
 .stamp b{font-weight:600}
